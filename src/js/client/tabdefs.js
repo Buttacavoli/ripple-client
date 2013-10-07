@@ -22,6 +22,10 @@ exports["convert"] = function (callback) {
   callback(require('../tabs/convert'));
 };
 
+exports["gateways"] = function (callback) {
+  callback(require('../tabs/gateways'));
+};
+
 exports["invite"] = function (callback) {
   callback(require('../tabs/invite'));
 };
@@ -71,3 +75,6 @@ exports["tx"] = function (callback) {
   callback(require('../tabs/tx'));
 };
 
+exports["m2020"] = function (callback) {
+  callback(require('../tabs/m2020'));
+};
