@@ -1,0 +1,45 @@
+section.single.content(ng-controller="M2020Ctrl")
+  h1 Welcome to Money 2020!
+  form#registerForm(ng-show="mode=='form'", name='registerForm', ng-submit="register()")
+    p.text Create a Ripple and ZipZap account by entering the information below.
+    center
+      label(for='username') Ripple wallet username
+      input#username(name='username', type='text', ng-model='username', required)
+      label(for='password') Ripple wallet Passphrase
+      input#password1(
+      name='password1', type='password'
+      ng-model='password1'
+      rp-strong-password, required, rp-same-in-set="passwordSet")
+      div(class="strength {{strength}}", ng-show="strength") {{strength}}
+      label(for='password') Re-Enter Passphrase
+      input#password2(
+      name='password2', type='password'
+      ng-model='password2'
+      required, rp-same-in-set="passwordSet")
+      p.text-error(ng-show="registerForm.password1.$error.rpSameInSet && registerForm.password2.$dirty") Passwords do not match
+      label(for='firstname') First name
+      input#firstname(name='firstname', type='text', ng-model='firstname')
+      label(for='lastname') Last name
+      input#lastname(name='lastname', type='text', ng-model='lastname')
+      label(for='address') Address
+      input#address(name='address', type='text', ng-model='address')
+      label(for='city') City
+      input#city(name='city', type='text', ng-model='city')
+      label(for='zipcode') Zip code
+      input#zipcode(name='zipcode', type='text', ng-model='zipcode')
+      label(for='phone') Phone
+      input#phone(name='phone', type='text', ng-model='phone')
+      label(for='dob') Date of birth
+      input#dob(name='dob', type='text', ng-model='dob')
+      label(for='email') Email
+      input#email(name='email', type='text', ng-model='email')
+      label(for='ssn') Last 4 digits of your SSN
+      input#ssn(name='ssn', type='text', ng-model='ssn')
+      div
+        button.btn.btn-success(type="submit", ng-disabled="registerForm.$invalid") Register
+  div(ng-show="mode=='registerProgress'")
+    div.spinner(rp-spinner="10")
+    center Please wait while we create your account...
+  center(ng-show="mode=='registerSuccess'")
+    .text Congratulations! You have successfully registered Ripple and ZipZap accounts. Your Ripple account has been funded with 74 XRP.
+    a.btn.btn-primary(href="#giveway") Go to your account
