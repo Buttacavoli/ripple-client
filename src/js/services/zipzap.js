@@ -43,7 +43,7 @@ module.factory('rpZipzap', ['$rootScope', function($scope)
      );
      */
 
-    this.baseUrl = 'zipzap.php';
+    this.baseUrl = '/fund/zipzap.php';
     this.params = {};
   };
 
