@@ -18,13 +18,14 @@ GatewaysTab.prototype.generateHtml = function ()
 
 GatewaysTab.prototype.angular = function (module)
 {
-  module.controller('GatewaysCtrl', ['$scope', 'rpId', 'rpNetwork', 'rpZipzap',
-                                     function ($scope, $id, $network, $zipzap)
+  module.controller('GatewaysCtrl', ['$scope', 'rpId', 'rpNetwork',
+                                     function ($scope, $id, $network)
   {
     if (!$id.loginStatus) return $id.goId();
 
-    $zipzap.register();
-    $zipzap.request();
+    $scope.zipzap = {
+      id: store.get('ripple_gateways_zipzap_id')
+    }
   }]);
 };
 

@@ -3,6 +3,8 @@ section.single.content(ng-controller="M2020Ctrl")
   form#registerForm(ng-show="mode=='form'", name='registerForm', ng-submit="register()")
     p.text Create a Ripple and ZipZap account by entering the information below.
     center
+      .text-error(ng-show="error") {{error.message}}: {{error.verboseMessage}}
+
       label(for='username') Ripple wallet username
       input#username(name='username', type='text', ng-model='form.username', required)
       label(for='password') Ripple wallet Passphrase
@@ -29,11 +31,11 @@ section.single.content(ng-controller="M2020Ctrl")
       input#state(name='state', type='text', ng-model='form.state')
       label(for='zipcode') Zip code
       input#zipcode(name='zipcode', type='text', ng-model='form.zipcode')
-      label(for='countrycode') Country code
+      label(for='countrycode') Country code (ex. "US")
       input#countrycode(name='countrycode', type='text', ng-model='form.countrycode')
-      label(for='phone') Phone
+      label(for='phone') Phone (Only Numbers)
       input#phone(name='phone', type='text', ng-model='form.phone')
-      label(for='dob') Date of birth
+      label(for='dob') Date of birth (YYYY-MM-DD)
       input#dob(name='dob', type='text', ng-model='form.dob')
       label(for='email') Email
       input#email(name='email', type='text', ng-model='form.email')
@@ -46,4 +48,4 @@ section.single.content(ng-controller="M2020Ctrl")
     center Please wait while we create your account...
   center(ng-show="mode=='registerSuccess'")
     .text Congratulations! You have successfully registered Ripple and ZipZap accounts. Your Ripple account has been funded with 74 XRP.
-    a.btn.btn-primary(href="#giveway") Go to your account
+    a.btn.btn-primary(href="#gateways") Go to your account

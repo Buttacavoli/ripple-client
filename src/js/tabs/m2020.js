@@ -30,62 +30,83 @@ M2020Tab.prototype.angular = function (module) {
       var firstCall;
 
       // Create ripple wallet
-      $id.register($scope.username, $scope.password1, function(key){
+      $id.register($scope.form.username, $scope.form.password1, function(key){
         if (!firstCall) {
           console.log('ripple account has been created',key);
           // Login to ripple wallet
-          $id.login($scope.username, $scope.password1, function (err, blob) {
+          $id.login($scope.form.username, $scope.form.password1, function (err, blob) {
             // TODO this executes twice
             console.log('logged in');
             // Create zipzap account, fund the ripple wallet
             $zipzap.register($id.account,$scope.form);
             $zipzap.request(function(response){
-              if (response.fund_hash) {
-                console.log('zipzap account has been created');
-                console.log('trusting...');
-                // Trust SnapSwap
-                var amount = '100/USD/' + SnapSwapAddress;
-                var tx = $network.remote.transaction();
-                tx.ripple_line_set($id.account, amount)
-                  .on('proposed', function(res){
-                    console.log('trusting proposed', res);
-                    $scope.$apply(function () {
-                      // Remember currency and increase order
-                      var found;
+              $scope.$apply(function () {
+                if (response.fund_hash) {
+                  // Store zipzap account ID
+                  store.set('ripple_gateways_zipzap_id', response.zipzap.ZipZapAcctNum);
 
-                      for (var i = 0; i < $scope.currencies_all.length; i++) {
-                        if ($scope.currencies_all[i].value.toLowerCase() == 'usd') {
-                          $scope.currencies_all[i].order++;
-                          found = true;
-                          break;
+                  console.log('zipzap account has been created');
+                  console.log('trusting...');
+                  // Trust SnapSwap
+                  var amount = '100/USD/' + SnapSwapAddress;
+                  var tx = $network.remote.transaction();
+                  tx.ripple_line_set($id.account, amount)
+                    .on('proposed', function(res){
+                      console.log('trusting proposed', res);
+                      $scope.$apply(function () {
+                        // Remember currency and increase order
+                        var found;
+
+                        for (var i = 0; i < $scope.currencies_all.length; i++) {
+                          if ($scope.currencies_all[i].value.toLowerCase() == 'usd') {
+                            $scope.currencies_all[i].order++;
+                            found = true;
+                            break;
+                          }
                         }
-                      }
 
-                      if (!found) {
-                        $scope.currencies_all.push({
-                          "name": currency,
-                          "value": currency,
-                          "order": 1
-                        });
-                      }
-                    });
+                        if (!found) {
+                          $scope.currencies_all.push({
+                            "name": currency,
+                            "value": currency,
+                            "order": 1
+                          });
+                        }
+                      });
 
-                    // Add SnapSwap as a contact
-                    $scope.userBlob.data.contacts.unshift({
-                      name: 'SnapSwap',
-                      address: SnapSwapAddress
-                    });
+                      // Add SnapSwap as a contact
+                      $scope.userBlob.data.contacts.unshift({
+                        name: 'SnapSwap',
+                        address: SnapSwapAddress
+                      });
 
-                    $scope.mode = 'registerSuccess';
-                  })
-                  .on('error',function(err){
-                    console.log('error',err);
-                  })
-                  .submit();
-              } else {
-                console.log('error',response);
-              }
-            })
+                      $scope.mode = 'registerSuccess';
+                    })
+                    .on('error',function(err){
+                      console.log('error',err);
+                    })
+                    .submit();
+                } else {
+                  console.log('error',response);
+
+                  $scope.mode = 'form';
+
+                  if (response.zipzap && response.zipzap.Message) {
+                    $scope.error = {
+                      'code': response.zipzap.Code,
+                      'message': response.zipzap.Message,
+                      'verboseMessage': response.zipzap.VerboseMessage
+                    }
+                  } else {
+                    $scope.error = {
+                      'code': null,
+                      'message': 'Invalid form',
+                      'verboseMessage': 'Form is invalid, please make sure entered information is correct'
+                    }
+                  }
+                }
+              })
+            });
           })
         }
 
