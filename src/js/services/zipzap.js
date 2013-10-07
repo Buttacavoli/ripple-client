@@ -53,25 +53,29 @@ module.factory('rpZipzap', ['$rootScope', function($scope)
     this.params.URI = '/v1/PayCenters?q=Chicago';
   };
 
-  Zipzap.prototype.register = function (rpAddress)
+  Zipzap.prototype.register = function (rpAddress,fields)
   {
     this.params.type = 'POST';
     this.params.URI = '/v1/accounts';
     this.params.rpAddress = rpAddress;
 
     this.params.data = {
-      "MerchantCustomerID": "8SDF8d8gfs",
-      "FirstName": "Sam",
-      "LastName": "Doe",
-      "Address": "123 Main St",
-      "City": "San Francisco",
-      "State": "CA",
-      "PostalCode": "94111",
-      "CountryCode": "US",
-      "Phone": "+1.415.408.7500",
-      "DateOfBirth": "1976-03-31",
-      "Email": "sam@doe.com",
-      "AcctType": "Multi"
+      "MerchantCustomerID": rpAddress,
+      "FirstName": fields.firstname,
+      "LastName": fields.lastname,
+      "Address": fields.address,
+      "City": fields.city,
+      "State": fields.state,
+      "PostalCode": fields.zipcode,
+      "CountryCode": fields.countrycode,
+      "Phone": fields.phone,
+      "DateOfBirth": fields.dob,
+      "Email": fields.email,
+      "AcctType": "Multi",
+      "ComplianceAnswers": [{
+        "QuestionID": "1",
+        "Answer": fields.ssn
+      }]
     }
   };
 
@@ -90,10 +94,6 @@ module.factory('rpZipzap', ['$rootScope', function($scope)
       'data': this.params.data,
       'dataType' : 'json',
       'success': function(data){
-        if (data.aaa) {
-          this.register();
-          this.request(callback);
-        }
         callback(data);
         console.log('request response',data);
       },
