@@ -67,7 +67,7 @@ module.factory('rpZipzap', ['$rootScope', function($scope)
       "City": fields.city,
       "State": fields.state,
       "PostalCode": fields.zipcode,
-      "CountryCode": fields.countrycode,
+      "CountryCode": fields.countrycode ? fields.countrycode.toUpperCase() : '',
       "Phone": fields.phone,
       "DateOfBirth": fields.dob,
       "Email": fields.email,
